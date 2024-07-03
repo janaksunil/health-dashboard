@@ -8,7 +8,7 @@ data = pd.read_excel('Final-GPT.xlsx')
 # Function to create a line plot for each test
 def plot_test(test_row):
     test_name = test_row['Test']
-    results = {'December': test_row['Result December'], 'June 2024': test_row['Result June 2024']}
+    results = {'December 2023': test_row['Result December'], 'June 2024': test_row['Result June 2024']}
     reference_range = test_row['Reference Range (number)'].split('-') if '-' in test_row['Reference Range (number)'] else [0, 0]
     risk_score = test_row['Risk Score']
     description = test_row['What does this test mean?']
@@ -48,13 +48,13 @@ def plot_test(test_row):
     },
     annotations=[
         dict(
-            x=1,
-            y=2,  # Adjust this as needed
+            x=0,
+            y=2,  
             xref='paper',
             yref='paper',
             text=f"<b><span style='color:{score_color};'>Risk Score: {risk_score}</span></b>",
             showarrow=False,
-            font=dict(size=12),  # Adjust font size as needed
+            font=dict(size=12),  
             align='right'
         )
     ],
