@@ -17,7 +17,7 @@ def plot_test(test_row):
     if risk_score < 3:
         score_color = 'green'
     elif risk_score < 6:
-        score_color = 'yellow'
+        score_color = 'orange'
     else:
         score_color = 'red'
 
