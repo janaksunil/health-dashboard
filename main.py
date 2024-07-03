@@ -2,10 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
-# Load the data
 data = pd.read_excel('Final-GPT.xlsx')
 
-# Function to create a line plot for each test
 def plot_test(test_row):
     test_name = test_row['Test']
     results = {'December 2023': test_row['Result December'], 'June 2024': test_row['Result June 2024']}
@@ -13,7 +11,7 @@ def plot_test(test_row):
     risk_score = test_row['Risk Score']
     description = test_row['What does this test mean?']
 
-    # Determine color based on risk score
+
     if risk_score < 3:
         score_color = 'green'
     elif risk_score < 6:
@@ -24,8 +22,6 @@ def plot_test(test_row):
 
     # Determine if the June 2024 result is out of the reference range
     out_of_range_june = not (float(reference_range[0]) <= test_row['Result June 2024'] <= float(reference_range[1]))
-
-    # Determine the color of the reference range based on the June 2024 result
     ref_color = 'red' if out_of_range_june else 'green'
 
 
