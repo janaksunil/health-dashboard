@@ -38,7 +38,7 @@ def plot_test(test_row):
             fig.add_annotation(x=date, y=value, text="Out of range", showarrow=True, arrowhead=1, arrowsize=2, arrowcolor="red", font=dict(color="red"))
 
     # Layout adjustments
-    # Layout adjustments
+
     fig.update_layout(
     title={
         'text': f"<b>{test_name}</b> <br><span style='font-size: 12px;'>{description}</span>",
