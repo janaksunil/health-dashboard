@@ -21,57 +21,77 @@ def plot_test(test_row):
     else:
         score_color = 'red'
 
+
+    # Determine if the June 2024 result is out of the reference range
+    out_of_range_june = not (float(reference_range[0]) <= test_row['Result June 2024'] <= float(reference_range[1]))
+
+    # Determine the color of the reference range based on the June 2024 result
+    ref_color = 'red' if out_of_range_june else 'green'
+
+
     # Create figure
     fig = go.Figure()
 
-    # Add trace for results
-    fig.add_trace(go.Scatter(x=list(results.keys()), y=list(results.values()), mode='lines+markers', name='Results'))
+    # Add trace for results with markers colored based on condition
+    marker_colors = ['red' if (key == 'June 2024' and out_of_range_june) else 'blue' for key in results.keys()]
+    fig.add_trace(go.Scatter(
+        x=list(results.keys()), 
+        y=list(results.values()), 
+        mode='lines+markers', 
+        name='Results',
+        line=dict(color='blue'),
+        marker=dict(color=marker_colors, size=10)
+    ))
 
-    # Add reference range lines
-    fig.add_trace(go.Scatter(x=list(results.keys()), y=[float(reference_range[0])]*2,
-                             mode='lines', name='Reference Min', line=dict(color='green', dash='dash')))
-    fig.add_trace(go.Scatter(x=list(results.keys()), y=[float(reference_range[1])]*2,
-                             mode='lines', name='Reference Max', fill='tonexty', line=dict(color='green', dash='dash')))
-
-    for date, value in results.items():
-        if float(value) < float(reference_range[0]) or float(value) > float(reference_range[1]):
-            fig.add_annotation(x=date, y=value, text="Out of range", showarrow=True, arrowhead=1, arrowsize=2, arrowcolor="red", font=dict(color="red"))
+    # Add reference range lines with dynamic coloring
+    fig.add_trace(go.Scatter(
+        x=list(results.keys()), 
+        y=[float(reference_range[0])]*2,
+        mode='lines', 
+        name='Reference Min', 
+        line=dict(color=ref_color, dash='dash')
+    ))
+    fig.add_trace(go.Scatter(
+        x=list(results.keys()), 
+        y=[float(reference_range[1])]*2,
+        mode='lines', 
+        name='Reference Max', 
+        fill='tonexty', 
+        line=dict(color=ref_color, dash='dash')
+    ))
 
     # Layout adjustments
-
     fig.update_layout(
-    title={
-        'text': f"<b>{test_name}</b> <br><span style='font-size: 12px;'>{description}</span>",
-        'x': 0.5,
-        'xanchor': 'center',
-        'yanchor': 'top'
-    },
-    annotations=[
-        dict(
-            x=0,
-            y=2,  
-            xref='paper',
-            yref='paper',
-            text=f"<b><span style='color:{score_color};'>Risk Score: {risk_score}</span></b>",
-            showarrow=False,
-            font=dict(size=12),  
-            align='right'
-        )
-    ],
-    
-    xaxis_title='Date',
-    yaxis_title='Value',
-    font=dict(
-        family="Helvetica, Arial, sans-serif",
-        size=14,
-        color="black"
-    ),
-    autosize=False,
-    width=500,
-    height=300,
-    margin=dict(l=50, r=50, b=100, t=100, pad=0)
-)
-
+        title={
+            'text': f"<b>{test_name}</b> <br><span style='font-size: 12px;'>{description}</span>",
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        annotations=[
+            dict(
+                x=0,
+                y=2,  
+                xref='paper',
+                yref='paper',
+                text=f"<b><span style='color:{risk_score < 3 and 'green' or (risk_score < 6 and 'orange' or 'red')}';'>Risk Score: {risk_score}</span></b>",
+                showarrow=False,
+                font=dict(size=12),  
+                align='right'
+            )
+        ],
+        xaxis_title='Date',
+        yaxis_title='Value',
+        font=dict(
+            family="Helvetica, Arial, sans-serif",
+            size=14,
+            color="black"
+        ),
+        autosize=False,
+        width=500,
+        height=300,
+        margin=dict(l=50, r=50, b=100, t=100, pad=0)
+    )
 
     return fig
 
