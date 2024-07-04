@@ -92,7 +92,7 @@ def plot_test(test_row):
     return fig
 
 # Display all plots in a grid layout
-st.title('Blood Dashboard')
+st.markdown("<h1 style='text-align: center;'>Blood Dashboard</h1>", unsafe_allow_html=True)
 cols = st.columns(2)
 
 for index, row in data.iterrows():
